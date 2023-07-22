@@ -38,12 +38,18 @@ function mod:revive()
                         player:Revive()
                         player:RemoveCollectible(CollectibleType.COLLECTIBLE_ANKH)
                         player:AddSoulHearts(9)
-                        if player:HasCollectible(CollectibleType.COLLECTIBLE_BIRTHRIGHT) and bombsNumber > 29 then
-                            
-                        end
+                        -- Add poops to bombs conversion
                         
                     end
                     -- Missing Poster
+                    if player:HasTrinket(TrinketType.TRINKET_MISSING_POSTER) then
+                       print("Player dead, reviving as Tainted Lost...")
+                       player:ChangePlayerType(PlayerType.PLAYER_THELOST_B)
+                       player:AddCard(Card.CARD_HOLY)
+                       player:AddTrinket(TrinketType.TRINKET_WOODEN_CROSS)
+                       player:Revive();
+                       player:TryRemoveTrinket(TrinketType.TRINKET_MISSING_POSTER)
+                    end
                 end
             end
         end
