@@ -1,5 +1,5 @@
 local mod = RegisterMod("Alt Revives", 1)
-ReviveTimer = 45
+ReviveTimer = 30
 
 function mod:revive()
     for i, e in pairs(Isaac.FindByType(EntityType.ENTITY_PLAYER, 0, -1, false, false)) do
@@ -29,7 +29,7 @@ function mod:revive()
                     end
                     -- Ankh
                     if player:HasCollectible(CollectibleType.ANKH) then
-                        local bombsNumber = player:GetNumBombs()
+                        local bombsCounter = player:GetNumBombs()
                         print("Player dead, reviving as Tainted ???...")
                         player:ChangePlayerType(PlayerType.PLAYER_BLUEBABY_B)
                         player:AddMaxHearts(-24, false)
@@ -38,8 +38,14 @@ function mod:revive()
                         player:Revive()
                         player:RemoveCollectible(CollectibleType.COLLECTIBLE_ANKH)
                         player:AddSoulHearts(9)
-                        -- Add poops to bombs conversion
-                        
+                        -- Add bombs to poops conversion
+                        if bombsCounter > 29 and player.HasCollectible(CollectibleType.COLLECTIBLE_BIRTHRIGHT) then
+                            player.AddPoopMana(player,29)
+                        elseif bombsCounter > 9 and not player.HasCollectible(player,CollectibleType.COLLECTIBLE_BIRTHRIGHT) then
+                            player.AddPoopMana(player,9)
+                        else
+                            player.AddPoopMana(player,bombsCounter)
+                        end
                     end
                     -- Missing Poster
                     if player:HasTrinket(TrinketType.TRINKET_MISSING_POSTER) then
